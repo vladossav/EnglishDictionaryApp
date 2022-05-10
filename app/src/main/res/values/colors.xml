@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background_white">#E6E6E6</color>
     <color name="bottom_menu">#A45254</color>
+    <color name="definition_background">#DB8284</color>
     <color name="main_dark">#6B1B1D</color>
 </resources>
