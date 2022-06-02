@@ -3,6 +3,7 @@
     package="com.example.tensor_project">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
+        android:name=".AppInit"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

@@ -13,11 +13,10 @@ import retrofit2.Response
 class WordFragmentViewModel: ViewModel() {
     val words = MutableLiveData(WordTest.getWords())
     val wordsList = MutableLiveData<List<WordItem>>()
+    private val api = DictionaryApi.create()
 
     fun connectApi(searchWord: String) {
-        val api = DictionaryApi.create().getWord(searchWord)
-
-        api.enqueue( object : Callback<List<WordItem>> {
+        api.getWord(searchWord).enqueue( object : Callback<List<WordItem>> {
             override fun onResponse(call: Call<List<WordItem>>?, response: Response<List<WordItem>>?) {
                 Log.i("Api",response.toString())
 

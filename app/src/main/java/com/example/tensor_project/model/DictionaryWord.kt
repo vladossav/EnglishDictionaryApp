@@ -5,12 +5,8 @@ import com.squareup.moshi.Json
 data class WordItem(
     @Json(name = "meanings")
     var meanings: List<Meaning> = listOf(),
-    @Json(name = "origin")
-    var origin: String = "",
     @Json(name = "phonetic")
     var phonetic: String = "",
-    @Json(name = "phonetics")
-    var phonetics: List<Phonetic> = listOf(),
     @Json(name = "word")
     var word: String = "",
 ) {
@@ -31,11 +27,4 @@ data class WordItem(
             var synonyms: List<String> = listOf(),
         )
     }
-
-    data class Phonetic(
-        @Json(name = "audio")
-        var audio: String = "",
-        @Json(name = "text")
-        var text: String = "",
-    )
 }

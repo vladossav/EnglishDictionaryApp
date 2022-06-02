@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tensor_project.R
 import com.example.tensor_project.model.WordItem
+import com.example.tensor_project.screens.MAIN_FRAGMENT
 
 class WordFragment : Fragment() {
     private val wordsViewModel: WordFragmentViewModel by activityViewModels()
@@ -17,7 +18,7 @@ class WordFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val str = arguments?.getString(WORD_FRAGMENT_KEY)
         Log.d("Api",str!!)
-        wordsViewModel.connectApi(str)
+        if (savedInstanceState == null) wordsViewModel.connectApi(str)
         super.onCreate(savedInstanceState)
     }
 
