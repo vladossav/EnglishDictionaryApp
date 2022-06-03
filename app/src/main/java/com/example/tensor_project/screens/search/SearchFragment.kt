@@ -13,7 +13,6 @@ import com.example.tensor_project.screens.word.WordFragment
 
 
 class SearchFragment : Fragment() {
-    private lateinit var wordFragment: WordFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +28,7 @@ class SearchFragment : Fragment() {
             }
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Log.i("search","onQueryTextSubmit: " + query as String)
-                startWordFragment(query)
+                startWordFragmentFromApi(query)
                 return false
             }
         })
@@ -40,15 +39,15 @@ class SearchFragment : Fragment() {
         val testBtn: Button = view.findViewById(R.id.search_testButton)
         testBtn.setOnClickListener {
 
-            startWordFragment(testList.random())
+            startWordFragmentFromApi(testList.random())
         }
         return view
     }
 
-    private fun startWordFragment(query: String) {
+    private fun startWordFragmentFromApi(query: String) {
         val bundle = Bundle()
-        bundle.putString(WordFragment.WORD_FRAGMENT_KEY,query)
-        wordFragment = WordFragment.newInstance(bundle)
+        bundle.putString(WordFragment.WORD_FRAGMENT_KEY_FROM_API,query)
+        val wordFragment = WordFragment.newInstance(bundle)
 
         parentFragmentManager
             .beginTransaction()

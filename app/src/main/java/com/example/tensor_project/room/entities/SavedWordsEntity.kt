@@ -9,14 +9,11 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 @Entity(tableName = "saved_words")
 data class SavedWordsEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-
+    @PrimaryKey
     @ColumnInfo(name = "word")
     val word: String,
 
     @ColumnInfo(name = "word_info")
-    //@TypeConverters(WordJsonConverter::class)
     val wordInfo: String, //JSON
 ) {
 
@@ -28,12 +25,10 @@ class WordJsonConverter {
     private val type = Types.newParameterizedType(List::class.java, WordItem::class.java)
     private val jsonAdapter = moshi.adapter<List<WordItem>>(type)
 
-    @TypeConverter
     fun fromJson(string: String): List<WordItem> {
         return jsonAdapter.fromJson(string).orEmpty()
     }
 
-    @TypeConverter
     fun toJson(word: List<WordItem>): String {
         return jsonAdapter.toJson(word)
     }

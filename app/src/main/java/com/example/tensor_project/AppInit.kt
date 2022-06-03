@@ -7,6 +7,9 @@ import android.util.Log
 import com.example.tensor_project.api.RandomWordApi
 import com.example.tensor_project.model.RandomWord
 import com.example.tensor_project.room.AppDatabase
+import com.example.tensor_project.room.WordRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,6 +20,11 @@ const val RANDOM_WORD_DEF = "defOfWordFromApi"
 
 class AppInit:Application() {
     val api = RandomWordApi.create()
+    //private val appScope = CoroutineScope(SupervisorJob())
+    private val database by lazy {
+        AppDatabase.getInstance(this)
+    }
+    val repository by lazy { WordRepository(database.getWordDao()) }
 
     override fun onCreate() {
         super.onCreate()

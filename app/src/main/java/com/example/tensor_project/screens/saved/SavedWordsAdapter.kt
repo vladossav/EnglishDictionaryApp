@@ -4,15 +4,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tensor_project.R
-import com.example.tensor_project.testWord.WordTest
 
-class SavedWordsAdapter() : RecyclerView.Adapter<SavedWordsAdapter.WordViewHolder>() {
-    private val wordsKeeper = mutableListOf<WordTest>()
+class SavedWordsAdapter(val clickListener: Listener) : RecyclerView.Adapter<SavedWordsAdapter.WordViewHolder>() {
+    private val wordsList: MutableList<String> = mutableListOf()
 
-    class WordViewHolder(item: View): RecyclerView.ViewHolder(item) {
-        val word: TextView = item.findViewById(R.id.saved_word)
+    interface Listener {
+        fun onClick(word: String)
+    }
+
+    inner class WordViewHolder(item: View): RecyclerView.ViewHolder(item) {
+        val word: TextView = item.findViewById(R.id.saved_word_text)
+        val wordItem: ConstraintLayout = item.findViewById(R.id.saved_word_item)
+        init {
+            wordItem.setOnClickListener {
+                clickListener.onClick(word.text.toString())
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
@@ -21,16 +31,18 @@ class SavedWordsAdapter() : RecyclerView.Adapter<SavedWordsAdapter.WordViewHolde
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        holder.word.text = wordsKeeper[position].word
+        holder.word.text = wordsList[position]
     }
 
     override fun getItemCount(): Int {
-        return wordsKeeper.size
+        return wordsList.size
     }
 
-    fun reload(newList: List<WordTest>) {
-        wordsKeeper.clear()
-        wordsKeeper.addAll(newList)
+    fun reload(newList: MutableList<String>) {
+        wordsList.clear()
+        wordsList.addAll(newList)
         notifyDataSetChanged()
     }
+
+
 }

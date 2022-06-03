@@ -6,24 +6,28 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.tensor_project.room.entities.SavedWordsEntity
 
-@Database(version = 1, entities = [SavedWordsEntity::class])
+
+@Database(version = 1, entities = [SavedWordsEntity::class], exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getWordDao(): WordDao
     
     companion object {
-        private var instance: AppDatabase ?= null
+        @Volatile
+        private var INSTANCE: AppDatabase ?= null
 
-        @Synchronized
         fun getInstance(context: Context): AppDatabase {
-            return if (instance == null) {
-                instance = Room.databaseBuilder(context,
-                AppDatabase::class.java,"dictionary_db").build()
-                instance as AppDatabase
+            return INSTANCE ?: synchronized(this){
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "dictionary_db"
+                ).build()
 
-            }  else {
-                instance as AppDatabase
+                INSTANCE = instance
+                instance
             }
         }
+
     }
 }

@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
+    android:id="@+id/saved_word_item"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/saved_word"
+        android:id="@+id/saved_word_text"
         android:text="word"
         android:textSize="25sp"
         android:textColor="@color/black"
