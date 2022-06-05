@@ -5,4 +5,10 @@
     <string name="btm_menu_liked">Saved</string>
     <string name="btm_menu">DictionaryApp</string>
 
+    <string name="saved_empty_back_text">Here you can keep words\nafter you find them in the search tab</string>
+    <string name="search_empty_back_text">Here you can see recent words\nafter searching in the search field</string>
+    <string name="word_error_text">Error: Internet connection is corrupted!</string>
+    <string name="search_clear"><u>clear</u></string>
+
+
 </resources>

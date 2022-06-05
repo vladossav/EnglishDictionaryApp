@@ -7,13 +7,15 @@ import com.example.tensor_project.model.WordItem
 import com.example.tensor_project.room.WordRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.HttpException
+import java.io.IOException
 
 class WordFragmentViewModel(private val wordRepository: WordRepository): ViewModel() {
     val curWordsList = MutableLiveData<List<WordItem>>()
     val isSaved = MutableLiveData(false)
+    val errorDetected = MutableLiveData(false)
+    val errorMessage = MutableLiveData<String>()
+    val loading = MutableLiveData(false)
     private val api = DictionaryApi.create()
 
 
@@ -26,31 +28,54 @@ class WordFragmentViewModel(private val wordRepository: WordRepository): ViewMod
         }
 
     fun getWordItemListFromDb(word: String) = viewModelScope.launch(Dispatchers.IO) {
+            errorDetected.postValue(false)
+            loading.postValue(true)
             curWordsList.postValue(wordRepository.getWordItemList(word))
+            loading.postValue(false)
         }
 
+    fun connectApi(searchWord: String) = viewModelScope.launch(Dispatchers.IO) {
+        errorDetected.postValue(false)
+        loading.postValue(true)
+        if (wordRepository.checkSavedWord(searchWord)) {
+            getWordItemListFromDb(searchWord)
+            isSaved.postValue(true)
+            return@launch
+        }
 
-    fun connectApi(searchWord: String) {
-        api.getWord(searchWord).enqueue( object : Callback<List<WordItem>> {
-            override fun onResponse(call: Call<List<WordItem>>?, response: Response<List<WordItem>>?) {
-                Log.i("Api",response.toString())
+        val response = try {
+            api.getWord(searchWord)
+        } catch (e: IOException) {
+            errorMessage.postValue("Error: Internet connection is corrupted!")
+            Log.e("Api", "IOException, you might not have internet connection")
+            errorDetected.postValue(true)
+            loading.postValue(false)
+            return@launch
+        } catch (e: HttpException) {
+            errorMessage.postValue("Error: Internet connection is corrupted!")
+            Log.e("Api", "HttpException, unexpected response")
+            errorDetected.postValue(true)
+            loading.postValue(false)
+            return@launch
+        }
 
-                if(response?.body() != null) {
-                    Log.i("Api","Response got")
-                    curWordsList.postValue(response.body())
-                }
-            }
+        if (response.isSuccessful && response.body() != null) {
+            curWordsList.postValue(response.body())
+            errorDetected.postValue(false)
+        } else {
+            errorDetected.postValue(true)
+            Log.e("Api", "Response not successful")
+        }
 
-            override fun onFailure(call: Call<List<WordItem>>?, t: Throwable?) {
-                Log.i("Api","Error: " + t?.message)
-            }
-        })
+        loading.postValue(false)
     }
+
+
 
     class ViewModelFactory(private val wordRepository: WordRepository)
         :ViewModelProvider.Factory{
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(WordFragmentViewModel::class.java)){
+            if (modelClass.isAssignableFrom(WordFragmentViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
                 return WordFragmentViewModel(wordRepository) as T
             }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tensor_project.AppInit
@@ -23,11 +24,14 @@ class SavedFragment : Fragment(), SavedWordsAdapter.Listener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_saved, container, false)
         val rv = view.findViewById<RecyclerView>(R.id.saved_rv)
+        val textEmpty = view.findViewById<TextView>(R.id.saved_back_text)
 
         val savedWordsAdapter = SavedWordsAdapter(this)
         rv.adapter = savedWordsAdapter
 
         savedWordsViewModel.words.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) textEmpty.visibility = View.GONE
+            else textEmpty.visibility = View.VISIBLE
             savedWordsAdapter.reload(it)
         }
 
@@ -41,7 +45,6 @@ class SavedFragment : Fragment(), SavedWordsAdapter.Listener {
 
     override fun onClick(word: String) {
         startWordFragmentFromDB(word)
-
     }
 
     private fun startWordFragmentFromDB(query: String) {

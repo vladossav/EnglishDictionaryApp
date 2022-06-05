@@ -26,26 +26,57 @@
 
     <TextView
         android:id="@+id/search_recently"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
         android:text="recently"
+        android:layout_marginTop="15dp"
         android:textColor="@color/main_dark"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginVertical="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_field" />
+
+    <TextView
+        android:id="@+id/search_recently_clear"
+        android:text="@string/search_clear"
+        android:textColor="#685D5D"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/search_field"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
 
-    <Button
-        android:id="@+id/search_testButton"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_rv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_recently"
-        android:text="test word fragment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/search_recently_empty_text"
+        android:text="@string/search_empty_back_text"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

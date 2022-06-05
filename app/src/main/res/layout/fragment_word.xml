@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="word"
         android:textColor="#681B1D"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -41,4 +40,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/word_phonetic" />
 
+    <ProgressBar
+        android:id="@+id/word_load"
+        android:theme="@style/progress_loading"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/word_error_text"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+   <ImageButton
+       android:visibility="gone"
+       android:id="@+id/word_refresh_btn"
+       android:src="@drawable/word_refresh_btn"
+       android:background="#00FFFFFF"
+       android:layout_marginBottom="50dp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+    />
 </androidx.constraintlayout.widget.ConstraintLayout>

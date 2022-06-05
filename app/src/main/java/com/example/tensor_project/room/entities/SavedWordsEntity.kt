@@ -15,9 +15,7 @@ data class SavedWordsEntity(
 
     @ColumnInfo(name = "word_info")
     val wordInfo: String, //JSON
-) {
-
-}
+)
 
 class WordJsonConverter {
     private val moshi = Moshi.Builder()

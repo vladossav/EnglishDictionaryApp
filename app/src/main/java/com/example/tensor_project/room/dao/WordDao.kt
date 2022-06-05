@@ -1,4 +1,4 @@
-package com.example.tensor_project.room
+package com.example.tensor_project.room.dao
 
 import androidx.room.*
 import com.example.tensor_project.room.entities.SavedWordsEntity
@@ -14,6 +14,9 @@ interface WordDao {
 
     @Query("SELECT * FROM saved_words")
     suspend fun getAllSavedWords(): List<SavedWordsEntity>
+
+    @Query("SELECT EXISTS (SELECT word FROM saved_words WHERE word = :wordValue)")
+    suspend fun checkSavedWord(wordValue: String): Boolean
 
     @Query("SELECT word FROM saved_words")
     fun getSavedWordsList(): Flow<MutableList<String>>

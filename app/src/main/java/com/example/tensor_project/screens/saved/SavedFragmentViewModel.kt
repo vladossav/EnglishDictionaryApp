@@ -9,7 +9,7 @@ import com.example.tensor_project.room.WordRepository
 
 class SavedFragmentViewModel(private val wordRepository: WordRepository):
 ViewModel() {
-    val words: LiveData<MutableList<String>> = wordRepository.wordsList.asLiveData()
+    val words: LiveData<MutableList<String>> = wordRepository.wordsSavedList.asLiveData()
 
     class ViewModelFactory(private val wordRepository: WordRepository)
         : ViewModelProvider.Factory{

@@ -1,4 +1,4 @@
-package com.example.tensor_project.screens.saved
+package com.example.tensor_project.screens.search
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tensor_project.R
 
-class SavedWordsAdapter(val clickListener: Listener) : RecyclerView.Adapter<SavedWordsAdapter.WordViewHolder>() {
+class RecentWordsAdapter(val clickListener: Listener) : RecyclerView.Adapter<RecentWordsAdapter.WordViewHolder>() {
     private val wordsList: MutableList<String> = mutableListOf()
 
     interface Listener {
@@ -43,5 +43,6 @@ class SavedWordsAdapter(val clickListener: Listener) : RecyclerView.Adapter<Save
         wordsList.addAll(newList)
         notifyDataSetChanged()
     }
+
 
 }

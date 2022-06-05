@@ -3,10 +3,10 @@ package com.example.tensor_project.screens.word
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tensor_project.AppInit
@@ -41,32 +41,46 @@ class WordFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.fragment_word, container, false)
-
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val word = view.findViewById<TextView>(R.id.word)
-        val phonetic = view.findViewById<TextView>(R.id.word_phonetic)
-        val wordDefinitionAdapter = WordDefinitionAdapter()
-
-        wordsViewModel.curWordsList.observe(viewLifecycleOwner, {
-            Log.d("Api",it.size.toString())
-            var arr: ArrayList<WordItem.Meaning> = arrayListOf()
-            for (element in it) {
-                arr.addAll(element.meanings)
-            }
-
-            wordDefinitionAdapter.reload(arr)
-
-            //word
-            word.text = it?.get(0)?.word
-            //phonetic
-            if (it?.get(0)?.phonetic == "") phonetic.setLines(0)
-            else phonetic.text = it?.get(0)?.phonetic
-        })
+        val word: TextView = view.findViewById(R.id.word)
+        val phonetic: TextView = view.findViewById(R.id.word_phonetic)
+        val errorText: TextView = view.findViewById(R.id.word_error_text)
+        val progressBar: ProgressBar = view.findViewById(R.id.word_load)
+        val refreshBtn: ImageButton = view.findViewById(R.id.word_refresh_btn)
 
         val rv = view.findViewById<RecyclerView>(R.id.word_rv)
+        val wordDefinitionAdapter = WordDefinitionAdapter()
         rv.adapter = wordDefinitionAdapter
+
+        wordsViewModel.loading.observe(viewLifecycleOwner, {
+            progressBar.isVisible = it
+        })
+
+        refreshBtn.setOnClickListener {
+            val str = arguments?.getString(WORD_FRAGMENT_KEY_FROM_API)
+            wordsViewModel.connectApi(str!!)
+        }
+
+        wordsViewModel.errorDetected.observe(viewLifecycleOwner, {
+            word.isVisible = !it
+            phonetic.isVisible = !it
+            rv.isVisible = !it
+            refreshBtn.isVisible = it
+            errorText.isVisible = it
+            if (it) errorText.text = wordsViewModel.errorMessage.value
+        })
+
+
+        wordsViewModel.curWordsList.observe(viewLifecycleOwner, {
+            val arr: ArrayList<WordItem.Meaning> = arrayListOf()
+            for (element in it) arr.addAll(element.meanings)
+            wordDefinitionAdapter.reload(arr)
+            word.text = it?.get(0)?.word                          //word
+            if (it?.get(0)?.phonetic == "") phonetic.setLines(0)  //phonetic
+            else phonetic.text = it?.get(0)?.phonetic
+        })
 
         return view
     }
@@ -75,11 +89,16 @@ class WordFragment : Fragment() {
         inflater.inflate(R.menu.word_toolbar, menu)
         super.onCreateOptionsMenu(menu, inflater)
 
-        val el = menu.findItem(R.id.word_toolbar_save)
+        val saveIcon = menu.findItem(R.id.word_toolbar_save)
 
-        el.isChecked = wordsViewModel.isSaved.value!!
-        if (el.isChecked) el.setIcon(R.drawable.word_toolbar_save)
+        wordsViewModel.errorDetected.observe(viewLifecycleOwner, {
+            saveIcon.isVisible = !it
+        })
 
+        wordsViewModel.isSaved.observe(viewLifecycleOwner, {
+            saveIcon.isChecked = it
+            if (saveIcon.isChecked) saveIcon.setIcon(R.drawable.word_toolbar_save)
+        })
     }
 
 

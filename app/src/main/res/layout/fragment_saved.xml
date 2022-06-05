@@ -13,6 +13,15 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
-
+    <TextView
+        android:id="@+id/saved_back_text"
+        android:visibility="gone"
+        android:textSize="20sp"
+        android:text="@string/saved_empty_back_text"
+        android:gravity="center"
+        android:layout_marginHorizontal="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </FrameLayout>
