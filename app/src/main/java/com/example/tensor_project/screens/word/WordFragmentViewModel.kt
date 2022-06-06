@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import java.lang.Exception
 
 class WordFragmentViewModel(private val wordRepository: WordRepository): ViewModel() {
     val curWordsList = MutableLiveData<List<WordItem>>()
@@ -57,12 +58,19 @@ class WordFragmentViewModel(private val wordRepository: WordRepository): ViewMod
             errorDetected.postValue(true)
             loading.postValue(false)
             return@launch
+        } catch (e: Exception) {
+            errorMessage.postValue("Error: Some troubles on server! Try later!")
+            errorDetected.postValue(true)
+            loading.postValue(false)
+            Log.e("Api","Error: Some troubles on server! Try later!")
+            return@launch
         }
 
         if (response.isSuccessful && response.body() != null) {
             curWordsList.postValue(response.body())
             errorDetected.postValue(false)
         } else {
+            errorMessage.postValue("Word '$searchWord' cannot be found!\nCome back and enter another word")
             errorDetected.postValue(true)
             Log.e("Api", "Response not successful")
         }

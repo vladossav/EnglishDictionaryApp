@@ -33,6 +33,7 @@ class SavedFragment : Fragment(), SavedWordsAdapter.Listener {
             if (it.isNotEmpty()) textEmpty.visibility = View.GONE
             else textEmpty.visibility = View.VISIBLE
             savedWordsAdapter.reload(it)
+            rv!!.layoutManager!!.scrollToPosition(0)
         }
 
         return view

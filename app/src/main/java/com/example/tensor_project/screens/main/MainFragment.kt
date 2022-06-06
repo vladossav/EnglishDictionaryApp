@@ -1,20 +1,26 @@
 package com.example.tensor_project.screens.main
 
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import com.example.tensor_project.*
-
+import com.google.android.material.card.MaterialCardView
 
 
 class MainFragment : Fragment() {
-    lateinit var sharedPref: SharedPreferences
-    lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
+    private val mainViewModel: MainFragmentViewModel by activityViewModels() {
+        MainFragmentViewModel.ViewModelFactory((activity?.application as AppInit).repository, (activity?.application as AppInit).sharedPref)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,25 +29,39 @@ class MainFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
         val word = view.findViewById<TextView>(R.id.word_random)
         val wordDef = view.findViewById<TextView>(R.id.word_definition_random)
-        sharedPref = context!!.getSharedPreferences(RANDOM_WORD, MODE_PRIVATE)
+        val progressBar: ProgressBar = view.findViewById(R.id.main_loading_word)
+        val wordCard = view.findViewById<MaterialCardView>(R.id.main_card)
+        val animWord = AnimationUtils.loadAnimation(context, R.anim.tv_appearance)
 
-        word.text = sharedPref.getString(RANDOM_WORD_VALUE, "Worsification")
-        wordDef.text = sharedPref.getString(RANDOM_WORD_DEF, "The composition of bad poetry")
+        wordCard.startAnimation(animWord)
 
-        listener = SharedPreferences.OnSharedPreferenceChangeListener { it, _ ->
-            word.text = it.getString(RANDOM_WORD_VALUE, " ")
-            wordDef.text = it.getString(RANDOM_WORD_DEF, " ")
+        mainViewModel.loading.observe(viewLifecycleOwner, {
+            progressBar.isVisible = it
+        })
+
+        mainViewModel.curWord.observe(viewLifecycleOwner, {
+            word.text = it.word
+            wordDef.text = it.definition
+        })
+
+        mainViewModel.errorDetected.observe(viewLifecycleOwner, {
+            if (it) Toast.makeText(context, mainViewModel.errorMessage.value, Toast.LENGTH_SHORT).show()
+        })
+
+        val animRotate: Animation = AnimationUtils.loadAnimation(context, R.anim.rotate)
+        val btnRefresh = view.findViewById<ImageButton>(R.id.main_refresh_btn)
+        btnRefresh.setOnClickListener {
+            it.startAnimation(animRotate)
+            mainViewModel.connectRandomWordApi()
         }
-        sharedPref.registerOnSharedPreferenceChangeListener(listener)
-
         return view
     }
 
     override fun onPause() {
+        mainViewModel.saveWordToDb()
         super.onPause()
-        sharedPref.unregisterOnSharedPreferenceChangeListener(listener)
-
     }
+
 
     companion object {
         @JvmStatic

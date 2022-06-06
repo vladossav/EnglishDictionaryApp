@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tensor_project.R
 import com.example.tensor_project.model.WordItem
@@ -81,8 +82,9 @@ class WordDefinitionAdapter(): RecyclerView.Adapter<WordDefinitionAdapter.WordVi
 
     fun reload(word: List<WordItem.Meaning>) {
         Log.d("Api","reload")
+        val difResult = DiffUtil.calculateDiff(WordDefinitionDiffUtil(wordsKeeper, word))
         wordsKeeper.clear()
         wordsKeeper.addAll(word)
-        notifyDataSetChanged()
+        difResult.dispatchUpdatesTo(this)
     }
 }

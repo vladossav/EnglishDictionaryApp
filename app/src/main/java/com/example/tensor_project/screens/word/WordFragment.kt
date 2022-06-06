@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tensor_project.AppInit
 import com.example.tensor_project.R
 import com.example.tensor_project.model.WordItem
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+
 
 class WordFragment : Fragment() {
     private val wordsViewModel: WordFragmentViewModel by activityViewModels {
@@ -58,7 +61,9 @@ class WordFragment : Fragment() {
             progressBar.isVisible = it
         })
 
+        val animRotate: Animation = AnimationUtils.loadAnimation(context, R.anim.rotate)
         refreshBtn.setOnClickListener {
+            it.startAnimation(animRotate)
             val str = arguments?.getString(WORD_FRAGMENT_KEY_FROM_API)
             wordsViewModel.connectApi(str!!)
         }
@@ -72,11 +77,12 @@ class WordFragment : Fragment() {
             if (it) errorText.text = wordsViewModel.errorMessage.value
         })
 
-
         wordsViewModel.curWordsList.observe(viewLifecycleOwner, {
             val arr: ArrayList<WordItem.Meaning> = arrayListOf()
             for (element in it) arr.addAll(element.meanings)
             wordDefinitionAdapter.reload(arr)
+            rv!!.layoutManager!!.scrollToPosition(0)
+
             word.text = it?.get(0)?.word                          //word
             if (it?.get(0)?.phonetic == "") phonetic.setLines(0)  //phonetic
             else phonetic.text = it?.get(0)?.phonetic
@@ -101,10 +107,6 @@ class WordFragment : Fragment() {
         })
     }
 
-
-
-
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -128,6 +130,7 @@ class WordFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 
     companion object {
         const val WORD_FRAGMENT_KEY_FROM_API = "WORD_FRAGMENT_KEY"

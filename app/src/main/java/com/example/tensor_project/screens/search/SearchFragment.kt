@@ -57,6 +57,7 @@ class SearchFragment : Fragment(), RecentWordsAdapter.Listener {
             if (it.isNotEmpty()) recentBackText.visibility = View.GONE
             else recentBackText.visibility = View.VISIBLE
             recentWordsAdapter.reload(it)
+            rv!!.layoutManager!!.scrollToPosition(0)
         }
 
         return view

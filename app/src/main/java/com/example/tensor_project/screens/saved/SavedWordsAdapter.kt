@@ -5,11 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tensor_project.R
+import com.example.tensor_project.RecyclerDiffUtil
 
 class SavedWordsAdapter(val clickListener: Listener) : RecyclerView.Adapter<SavedWordsAdapter.WordViewHolder>() {
-    private val wordsList: MutableList<String> = mutableListOf()
+    private var wordsList: MutableList<String> = mutableListOf()
 
     interface Listener {
         fun onClick(word: String)
@@ -39,9 +41,9 @@ class SavedWordsAdapter(val clickListener: Listener) : RecyclerView.Adapter<Save
     }
 
     fun reload(newList: MutableList<String>) {
-        wordsList.clear()
-        wordsList.addAll(newList)
-        notifyDataSetChanged()
+        val difResult = DiffUtil.calculateDiff(RecyclerDiffUtil(wordsList, newList))
+        wordsList = newList
+        difResult.dispatchUpdatesTo(this)
     }
 
 }

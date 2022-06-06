@@ -31,10 +31,9 @@
         app:strokeWidth="4dp"
         app:cardCornerRadius="30dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             >
 
             <TextView
@@ -47,10 +46,13 @@
                 android:layout_marginTop="8dp"
                 android:textColor="@color/white"
                 android:textSize="40sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 />
 
             <TextView
-                android:id="@+id/text2"
+                android:id="@+id/word_means"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -58,6 +60,9 @@
                 android:textStyle="italic"
                 android:textColor="@color/main_dark"
                 android:textSize="25sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/word_random"
                 />
 
             <TextView
@@ -72,14 +77,41 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/word_means"
+                app:layout_constraintBottom_toBottomOf="parent"
                 />
-        </LinearLayout>
 
-
-
+            <ProgressBar
+                android:id="@+id/main_loading_word"
+                android:theme="@style/progress_loading"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
+
+
+    <ImageButton
+        android:visibility="visible"
+        android:id="@+id/main_refresh_btn"
+        android:src="@drawable/word_refresh_btn"
+        android:background="#00FFFFFF"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

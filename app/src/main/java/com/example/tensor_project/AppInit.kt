@@ -2,27 +2,24 @@ package com.example.tensor_project
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
+import android.content.SharedPreferences
 import com.example.tensor_project.api.RandomWordApi
-import com.example.tensor_project.model.RandomWord
 import com.example.tensor_project.room.AppDatabase
 import com.example.tensor_project.room.WordRepository
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 const val RANDOM_WORD = "RANDOM_WORD"
 const val RANDOM_WORD_VALUE = "wordFromApi"
 const val RANDOM_WORD_DEF = "defOfWordFromApi"
 
-class AppInit:Application() {
+class AppInit: Application() {
     private val api = RandomWordApi.create()
     private val database by lazy {
         AppDatabase.getInstance(this)
     }
     val repository by lazy { WordRepository(database.getWordDao(), database.getRecentDao()) }
-
-    override fun onCreate() {
+    val sharedPref: SharedPreferences by lazy { getSharedPreferences(RANDOM_WORD, Context.MODE_PRIVATE)}
+   /* override fun onCreate() {
         super.onCreate()
         connectRandomWordApi()
 
@@ -36,7 +33,7 @@ class AppInit:Application() {
                 if(response?.body() != null) {
                     val res = response.body()
                     val word: RandomWord = res!!.first()
-                    val sharedPref = getSharedPreferences(RANDOM_WORD, Context.MODE_PRIVATE)
+
                     sharedPref.edit()
                         .putString(RANDOM_WORD_VALUE, word.word)
                         .putString(RANDOM_WORD_DEF, word.definition)
@@ -51,5 +48,5 @@ class AppInit:Application() {
                 Log.i("Api","some error: " + t?.message)
             }
         })
-    }
+    }*/
 }
