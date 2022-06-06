@@ -40,6 +40,7 @@ class MainFragment : Fragment() {
         })
 
         mainViewModel.curWord.observe(viewLifecycleOwner, {
+            wordCard.startAnimation(animWord)
             word.text = it.word
             wordDef.text = it.definition
         })

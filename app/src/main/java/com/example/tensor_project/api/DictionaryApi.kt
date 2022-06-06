@@ -3,7 +3,6 @@ package com.example.tensor_project.api
 import com.example.tensor_project.model.WordItem
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 
