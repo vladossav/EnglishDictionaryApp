@@ -5,5 +5,6 @@
 ## Sample
 ![Main](/screenshots/screen_main.png)
 ![Word](/screenshots/screen_word.png)
+<img src="/screenshots/screen_word.png"  width=50% height=50%>
 
 ![Screen Recording](/screenshots/screen_record.gif)
